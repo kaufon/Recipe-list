@@ -1,25 +1,4 @@
-# README
+#Recipes list
+This project is a web application for managing and sharing recipes. It implements a comprehensive CRUD system for handling recipes, allowing users to create new recipes, view existing ones, edit existing recipes, and delete unwanted recipes. The application also includes various features to enhance the user experience.
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-# Recipe-list
+Made with RoR , ReactJS and TailWindCSS
