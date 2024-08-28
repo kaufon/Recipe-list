@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { json, Link, useNavigate } from "react-router-dom";
 
 const NewRecipe = () => {
   const navigate = useNavigate();
@@ -31,43 +31,94 @@ const NewRecipe = () => {
     const body = {
       name,
       ingredients,
-      instruction: stripHtmlEntities(instruction)
-    }
-    const token = document.querySelector('meta[name=csrf-token]')?.getAttribute("content")
-    fetch(url,{
+      insctruciton: stripHtmlEntities(instruction),
+    };
+    console.log({body})
+    const token = document
+      .querySelector("meta[name=csrf-token]")
+      ?.getAttribute("content");
+    fetch(url, {
       method: "POST",
-      headers:{
-        "X-CSRF-TOKEN":token || "",
-        "Content-Type": "application/json"
+      headers: {
+        "X-CSRF-TOKEN": token || "",
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(body)
-    }).then((reponse) => {
+      body: JSON.stringify(body),
+    })
+      .then((reponse) => {
         if (reponse.ok) {
-          return reponse.json()
-          
+          return reponse.json();
         }
-        throw new Error("response no ok")
-      }).then((response) => navigate(`/recipe/${response.id}`)).catch((error) => console.log(error.message))
+        throw new Error("no ok");
+      })
+      .then((response) => navigate(`/recipe/${response.id}`))
+      .catch((error) => console.log(error.message));
   };
 
   return (
-  <>
-    <div className="container m-5">
-      <div className="flex flex-col space-y-4">
-        <div className="text-center">
-          <h1 className="font-normal mb-5 text-xl">
+    <>
+      <div className=" m-5 flex  h-full w-full items-center justify-center  ">
+        <div className="flex flex-col space-y-4 justify-center items-center ">
+          <h1 className="font-bold m-5 text-3xl text-gray-900 ">
             Add new recipe
-            </h1>
-          <form onSubmit={onSubmit}>
-            <div className="w-full max-w-md">
-              <label htmlFor="recipeName">Recipe Name</label>
-              <input type="text" name="name" id="recipeName" className="block text-sm font-medium text-gray-700" required onChange={(event) => onChange(event,setName)}/>
+          </h1>
+          <div className="text-center flex ">
+            <form
+              onSubmit={onSubmit}
+              className="flex items-center justify-center flex-col "
+            >
+              <div className="w-full max-w-md">
+                <label htmlFor="recipeName">Recipe Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  id="recipeName"
+                  className="block text-center text-sm font-medium border-2 border-gray-400 rounded-full w-full"
+                  required
+                  onChange={(event) => onChange(event, setName)}
+                />
               </div>
+              <div className="w-full max-w-md">
+                <label htmlFor="recipeIngredients">Ingredients</label>
+                <input
+                  type="text"
+                  name="ingredients"
+                  id="recipeIngredients"
+                  className="block text-sm text-center font-medium border-2 border-gray-400 rounded-full w-full"
+                  required
+                  onChange={(event) => onChange(event, setIngredients)}
+                />
+
+                <small id="help" className="font-medium ">
+                  Separe each ingredient with comma
+                </small>
+              </div>
+              <label htmlFor="instruction">Preparation</label>
+              <textarea
+                className="block text-sm font-medium text-left border-2 rounded-md border-gray-400 w-full"
+                id="instruction"
+                name="instruction"
+                rows={5}
+                required
+                onChange={(event) => onChange(event, setInstruction)}
+              />
+              <button
+                type="submit"
+                className="border rounded-full bg-green-600 text-white p-4 m-3"
+              >
+                Create Recipe
+              </button>
+              <Link
+                to={"/recipes"}
+                className="border bg-red-600 rounded-full text-white p-4 m-3"
+              >
+                Back to recipes
+              </Link>
             </form>
           </div>
         </div>
       </div>
-      </>
-  )
+    </>
+  );
 };
 export default NewRecipe;
