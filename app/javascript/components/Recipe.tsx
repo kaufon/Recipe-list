@@ -15,8 +15,8 @@ const Recipe = () => {
     id: 0,
     name: "",
     ingredients: "",
-    insctruciton:"",
-    image:"",
+    insctruciton: "",
+    image: "",
   });
 
   useEffect(() => {
@@ -48,6 +48,26 @@ const Recipe = () => {
     }
     return ingredientList;
   };
+  const deleteRecipe = () => {
+    const url = `/api/v1/destroy/${params.id}`;
+    const token = document
+      .querySelector("meta[name=csrf-token]")
+      ?.getAttribute("content");
+    fetch(url,{
+      method: "DELETE",
+      headers:{
+        "X-CSRF-TOKEN": token ||"",
+        "Content-Type": "application/json",
+      },
+
+    }).then((response)=>{
+        if (response.ok) {
+          return response.json()
+          
+        }
+        throw new Error("No ok womp womp")
+      }).then(() => navigate("/recipes")).catch((err) => console.log(err.message)) 
+  };
   const recipeInstruction = addHtmlEntities(recipe.insctruciton);
   return (
     <div className="bg-white p-8">
@@ -69,9 +89,11 @@ const Recipe = () => {
               {ingredientList()}
             </ul>
           </div>
-          <div className="w-full h-px bg-black"/>
+          <div className="w-full h-px bg-black" />
           <div className="w-full px-4">
-            <h5 className="mb-4 font-bold text-2xl">Preparation Instructions</h5>
+            <h5 className="mb-4 font-bold text-2xl">
+              Preparation Instructions
+            </h5>
             <div
               dangerouslySetInnerHTML={{
                 __html: `${recipeInstruction}`,
@@ -79,12 +101,19 @@ const Recipe = () => {
             />
           </div>
           <div className="w-full px-4 mt-8">
-            <button type="button" className="w-32 p-4 bg-red-500 text-white font-bold border-2 rounded-md">
+            <button
+              onClick={deleteRecipe}
+              type="button"
+              className="w-32 p-4 bg-red-500 text-white font-bold border-2 rounded-md"
+            >
               Delete Recipe
             </button>
           </div>
         </div>
-        <Link to="/recipes" className="flex mt-8 text-blue-500 hover:text-blue-700 border-4 rounded-full p-4 font-bold text-2xl items-center justify-center">
+        <Link
+          to="/recipes"
+          className="flex mt-8 text-blue-500 hover:text-blue-700 border-4 rounded-full p-4 font-bold text-2xl items-center justify-center"
+        >
           Back to recipes
         </Link>
       </div>
